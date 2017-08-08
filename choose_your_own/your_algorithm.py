@@ -3,8 +3,14 @@
 import matplotlib.pyplot as plt
 from prep_terrain_data import makeTerrainData
 from class_vis import prettyPicture
+# from sklearn.neighbors import NearestNeighbors
+from sklearn import neighbors
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
 
 features_train, labels_train, features_test, labels_test = makeTerrainData()
+
 
 
 ### the training data (features_train, labels_train) have both "fast" and "slow"
@@ -28,9 +34,20 @@ plt.show()
 ################################################################################
 
 
-### your code here!  name your classifier object clf if you want the 
+### your code here!  name your classifier object clf if you want the
 ### visualization code (prettyPicture) to show you the decision boundary
 
+#Nearest neighbor
+# clf = neighbors.RadiusNeighborsClassifier(radius=1, weights='distance', algorithm='auto')
+
+#adaboost
+clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1, min_samples_split=40), learning_rate=1,
+                         algorithm="SAMME",
+                         n_estimators=600)
+clf = clf.fit(features_train, labels_train)
+pred = clf.predict(features_test)
+acc = accuracy_score(labels_test, pred)
+print acc
 
 
 
